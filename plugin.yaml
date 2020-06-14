@@ -1,0 +1,6 @@
+plugin:
+    name: 'magenizr.envbar::lang.plugin.name'
+    description: 'magenizr.envbar::lang.plugin.description'
+    author: 'Magenizr'
+    icon: oc-icon-bullhorn
+    homepage: 'https://www.magenizr.com'

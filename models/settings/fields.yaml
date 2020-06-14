@@ -1,0 +1,35 @@
+tabs:
+    fields:
+        enabled:
+            label: magenizr.envbar::lang.settings.enabled
+            comment: magenizr.envbar::lang.settings.enabled_comment
+            tab: magenizr.envbar::lang.settings.tab_default
+            default: false
+            type: switch
+            span: storm
+            cssClass: col-md-12
+        superuser:
+            label: magenizr.envbar::lang.settings.superuser
+            comment: magenizr.envbar::lang.settings.superuser_comment
+            tab: magenizr.envbar::lang.settings.tab_default
+            default: false
+            type: switch
+            span: storm
+            cssClass: col-md-12
+        envs:
+            label: magenizr.envbar::lang.settings.envs
+            tab: magenizr.envbar::lang.settings.tab_default
+            type: repeater
+            form:
+                fields:
+                    env:
+                        label: magenizr.envbar::lang.settings.env
+                        span: storm
+                        cssClass: col-md-3
+                        type: text
+                    color:
+                        label: magenizr.envbar::lang.settings.color
+                        span: storm
+                        cssClass: col-md-9
+                        type: colorpicker
+                        availableColors: [#16a085, #27ae60, #3498db, #9b59b6, #34495e, #f39c12, #e67e22, #e74c3c, #708598, #4f5458]
