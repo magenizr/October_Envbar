@@ -1,13 +1,15 @@
 <?php namespace Magenizr\Envbar\Models;
+
 /**
  * Magenizr Envbar
  *
  * @category    Magenizr
  * @package     Magenizr_Envbar
  * @copyright   Copyright (c) 2020 Magenizr (https://www.Magenizr.com)
- * @license		http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @license        http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
+use App;
 use BackendAuth;
 use Model;
 use Lang;
@@ -20,160 +22,180 @@ use Less_Parser;
  */
 class Settings extends Model
 {
-	const DEVELOP_COLOR = '#27ae60';
+    const DEVELOPMENT_COLOR = '#27ae60';
 
-	const STAGING_COLOR = '#f39c12';
+    const STAGING_COLOR = '#f39c12';
 
-	const PRODUCTION_COLOR = '#e74c3c';
+    const PRODUCTION_COLOR = '#e74c3c';
 
-	/**
-	 * @var string The key to store rendered CSS in the cache under
-	 */
-	public $cacheKey = 'backend::magenizr.envbar.style';
+    const CSS_STYLE_FILE = 'magenizr.envbar.style.css';
 
-	/**
-	 * @var array
-	 */
-	public $implement = ['System.Behaviors.SettingsModel'];
+    /**
+     * @var string The key to store rendered CSS in the cache under
+     */
+    public $cacheKey = 'backend::magenizr.envbar.style';
 
-	/**
-	 * @var string
-	 */
-	public $settingsCode = 'magenizr_envbar';
+    /**
+     * @var array
+     */
+    public $implement = ['System.Behaviors.SettingsModel'];
 
-	/**
-	 * @var string
-	 */
-	public $settingsFields = 'fields.yaml';
+    /**
+     * @var string
+     */
+    public $settingsCode = 'magenizr_envbar';
 
-	// Default settings.
-	public function initSettingsData()
-	{
-		$this->enabled = false;
+    /**
+     * @var string
+     */
+    public $settingsFields = 'fields.yaml';
 
-		$this->superuser = false;
+    // Default settings.
+    public function initSettingsData()
+    {
+        $config = App::make('config');
 
-		$this->envs = [
-			0 => [
-				'env' => 'develop',
-				'color' => self::DEVELOP_COLOR,
-			],
-			1 => [
-				'env' => 'staging',
-				'color' => self::STAGING_COLOR,
-			],
-			2 => [
-				'env' => 'production',
-				'color' => self::PRODUCTION_COLOR,
-			],
-		];
-	}
+        $this->enabled = false;
 
-	/**
-	 * Clear cache after saving settings.
-	 */
-	public function afterSave()
-	{
-		Cache::forget(self::instance()->cacheKey);
-	}
+        $this->superuser = false;
 
-	/**
-	 * Render CSS or return cached version.
-	 *
-	 * @return string
-	 */
-	public function renderCss()
-	{
-		if (! $this->checkPermissions()) {
-			return false;
-		}
+        $this->envs = [
+            0 => [
+                'env' => 'development',
+                'color' => $config->get('magenizr_envbar.color', self::DEVELOPMENT_COLOR),
+            ],
+            1 => [
+                'env' => 'staging',
+                'color' => $config->get('magenizr_envbar.color', self::STAGING_COLOR),
+            ],
+            2 => [
+                'env' => 'production',
+                'color' => $config->get('magenizr_envbar.color', self::PRODUCTION_COLOR),
+            ],
+        ];
+    }
 
-		$cacheKey = self::instance()->cacheKey;
-		if (Cache::has($cacheKey)) {
+    /**
+     * Clear cache after saving settings.
+     */
+    public function afterSave()
+    {
+        Cache::forget(self::instance()->cacheKey);
+    }
 
-			return Cache::get($cacheKey);
-		}
+    /**
+     * Render CSS or return cached version.
+     *
+     * @return string
+     */
+    public function renderCss()
+    {
+        if (! $this->checkPermissions()) {
+            return false;
+        }
 
-		try {
-			$customCss = $this->compileCss();
-			Cache::forever($cacheKey, $customCss);
-		} catch (Exception $ex) {
-			$customCss = '/* '.$ex->getMessage().' */';
-		}
+        $cacheKey = self::instance()->cacheKey;
+        if (Cache::has($cacheKey) && $this->isCssCompiled()) {
 
-		return $customCss;
-	}
+            return Cache::get($cacheKey);
+        }
 
-	/**
-	 * Compile CSS and save as a file.
-	 *
-	 * @return mixed
-	 * @throws \Exception
-	 */
-	private function compileCss()
-	{
-		$parser = new Less_Parser(['compress' => true]);
-		$lessPath = File::symbolizePath('~/plugins/magenizr/envbar/assets/less/');
+        try {
+            $customCss = $this->compileCss();
+            Cache::forever($cacheKey, $customCss);
+        } catch (Exception $ex) {
+            $customCss = '/* '.$ex->getMessage().' */';
+        }
 
-		$parser->ModifyVars([
-			'color' => $this->getEnv('color'),
-		]);
+        return $customCss;
+    }
 
-		$parser->parse(File::get($lessPath.'/style.less'));
+    /**
+     * Compile CSS and save as a file.
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private function compileCss()
+    {
+        $parser = new Less_Parser(['compress' => true]);
+        $lessPath = File::symbolizePath('~/plugins/magenizr/envbar/assets/less/');
 
-		return File::put(temp_path('magenizr.envbar.style.css'), $parser->getCss());
-	}
+        $parser->ModifyVars([
+            'color' => $this->getEnv('color'),
+        ]);
 
-	/**
-	 * Get environment settings.
-	 *
-	 * @return bool|string
-	 */
-	private function getEnv($key = '')
-	{
-		$appEnv = env('APP_ENV');
+        $parser->parse(File::get($lessPath.'/style.less'));
 
-		foreach ($this->envs as $envs) {
+        return File::put(temp_path(self::CSS_STYLE_FILE), $parser->getCss());
+    }
 
-			$env = trim($envs['env']);
+    /**
+     * Check if css file has been compiled already.
+     *
+     * @return mixed
+     */
+    private function isCssCompiled()
+    {
 
-			if ($appEnv === $env) {
+        return File::exists(temp_path(self::CSS_STYLE_FILE));
+    }
 
-				if (isset($envs[$key])) {
-					return $envs[$key];
-				}
+    /**
+     * Get environment settings.
+     *
+     * @return bool|string
+     */
+    private function getEnv($key = '')
+    {
+        $appEnv = env('APP_ENV');
 
-				return $env;
-			}
-		}
+        if (empty($appEnv)) {
+            $appEnv = App::environment();
+        }
 
-		return false;
-	}
+        foreach ($this->envs as $envs) {
 
-	/**
-	 * Check permissions.
-	 *
-	 * @return bool
-	 */
-	private function checkPermissions() {
+            $env = trim($envs['env']);
 
-		if (! $this->enabled) {
-			return false;
-		}
+            if ($appEnv === $env) {
 
-		if ($this->superuser) {
+                if (isset($envs[$key])) {
+                    return $envs[$key];
+                }
 
-			$isSuperUser = BackendAuth::getUser()->isSuperUser();
+                return $env;
+            }
+        }
 
-			if (!$isSuperUser) {
-				return false;
-			}
-		}
+        return false;
+    }
 
-		if (! $this->getEnv()) {
-			return false;
-		}
+    /**
+     * Check permissions.
+     *
+     * @return bool
+     */
+    private function checkPermissions()
+    {
 
-		return true;
-	}
+        if (! $this->enabled) {
+            return false;
+        }
+
+        if ($this->superuser) {
+
+            $isSuperUser = BackendAuth::getUser()->isSuperUser();
+
+            if (! $isSuperUser) {
+                return false;
+            }
+        }
+
+        if (! $this->getEnv()) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -16,11 +16,14 @@ Go to `Settings > System > Updates & Plugins` and search for the plugin.
 2. Extract the downloaded tar.gz file. Example: `tar -xzf Magenizr_Envbar_1.0.0.tar.gz`.
 3. Copy the code into `./plugins/magenizr/envbar/`.
 
+## Configuration
+Make sure the name of the environment ( e.g `development` ) matches the value of the variable `APP_ENV` or `default` in `./config/environment.php`.
+
 ## Features
-* Enable or disable feature temporarily.
-* Enable feature for Superusers only.
+* Enable or disable temporarily.
+* Enable for Superusers only.
 * Add multiple environments and choose the color of the bar.
-  
+
 ## Usage
 Simply navigate to `Settings > System > Envbar` and enable the plugin. Update colors within the `Environments` section if required.
 
@@ -31,6 +34,10 @@ If you experience any issues, don't hesitate to open an issue on [Github](https:
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
+===== 1.0.1 =====
+* Fallback for `APP_ENV` variable.
+* Compile CSS again if `./storage/temp` has been cleared.
+
 ===== 1.0.0 =====
 * First release
 

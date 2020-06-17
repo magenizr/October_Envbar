@@ -1,2 +1,4 @@
 1.0.0:
     - 'Initialize plugin.'
+1.0.1:
+    - 'Fallback for APP_ENV variable. Compile CSS again if ./storage/temp has been cleared.'
