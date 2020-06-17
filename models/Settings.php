@@ -53,8 +53,6 @@ class Settings extends Model
     // Default settings.
     public function initSettingsData()
     {
-        $config = App::make('config');
-
         $this->enabled = false;
 
         $this->superuser = false;
@@ -62,15 +60,15 @@ class Settings extends Model
         $this->envs = [
             0 => [
                 'env' => 'development',
-                'color' => $config->get('magenizr_envbar.color', self::DEVELOPMENT_COLOR),
+                'color' => self::DEVELOPMENT_COLOR,
             ],
             1 => [
                 'env' => 'staging',
-                'color' => $config->get('magenizr_envbar.color', self::STAGING_COLOR),
+                'color' => self::STAGING_COLOR,
             ],
             2 => [
                 'env' => 'production',
-                'color' => $config->get('magenizr_envbar.color', self::PRODUCTION_COLOR),
+                'color' => self::PRODUCTION_COLOR,
             ],
         ];
     }
@@ -122,7 +120,7 @@ class Settings extends Model
         $lessPath = File::symbolizePath('~/plugins/magenizr/envbar/assets/less/');
 
         $parser->ModifyVars([
-            'color' => $this->getEnv('color'),
+            'color' => self::get('magenizr_envbar.color', $this->getEnv('color')),
         ]);
 
         $parser->parse(File::get($lessPath.'/style.less'));
