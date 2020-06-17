@@ -13,7 +13,7 @@ Go to `Settings > System > Updates & Plugins` and search for the plugin.
 
 ## Installation (Manually)
 1. Download the code.
-2. Extract the downloaded tar.gz file. Example: `tar -xzf Magenizr_Envbar_1.0.0.tar.gz`.
+2. Extract the downloaded tar.gz file. Example: `tar -xzf October_Envbar_1.0.1.tar.gz`.
 3. Copy the code into `./plugins/magenizr/envbar/`.
 
 ## Configuration
@@ -28,7 +28,7 @@ Make sure the name of the environment ( e.g `development` ) matches the value of
 Simply navigate to `Settings > System > Envbar` and enable the plugin. Update colors within the `Environments` section if required.
 
 ## Support
-If you experience any issues, don't hesitate to open an issue on [Github](https://github.com/magenizr/Magenizr_Envbar/issues).
+If you experience any issues, don't hesitate to open an issue on [Github](https://github.com/magenizr/October_Envbar/issues).
 
 ## Contact
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
