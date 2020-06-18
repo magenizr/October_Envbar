@@ -31,8 +31,9 @@ class Plugin extends PluginBase
 
             $this->settings = Settings::instance();
 
-            if ($this->settings->renderCss()) {
-                $controller->addCss('/storage/temp/magenizr.envbar.style.css', '1.0.1');
+            if ($this->settings->setPathTemp('public')->renderCss()) {
+
+                $controller->addCss($this->settings->getPublicCssPath(), '1.0.2');
             }
         });
     }

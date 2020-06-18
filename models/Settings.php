@@ -50,7 +50,10 @@ class Settings extends Model
      */
     public $settingsFields = 'fields.yaml';
 
+    private $pathTemp;
+
     // Default settings.
+
     public function initSettingsData()
     {
         $this->enabled = false;
@@ -93,6 +96,7 @@ class Settings extends Model
         }
 
         $cacheKey = self::instance()->cacheKey;
+
         if (Cache::has($cacheKey) && $this->isCssCompiled()) {
 
             return Cache::get($cacheKey);
@@ -109,34 +113,30 @@ class Settings extends Model
     }
 
     /**
-     * Compile CSS and save as a file.
+     * Check permissions.
      *
-     * @return mixed
-     * @throws \Exception
+     * @return bool
      */
-    private function compileCss()
+    private function checkPermissions()
     {
-        $parser = new Less_Parser(['compress' => true]);
-        $lessPath = File::symbolizePath('~/plugins/magenizr/envbar/assets/less/');
+        if (! $this->enabled) {
+            return false;
+        }
 
-        $parser->ModifyVars([
-            'color' => self::get('magenizr_envbar.color', $this->getEnv('color')),
-        ]);
+        if ($this->superuser) {
 
-        $parser->parse(File::get($lessPath.'/style.less'));
+            $isSuperUser = BackendAuth::getUser()->isSuperUser();
 
-        return File::put(temp_path(self::CSS_STYLE_FILE), $parser->getCss());
-    }
+            if (! $isSuperUser) {
+                return false;
+            }
+        }
 
-    /**
-     * Check if css file has been compiled already.
-     *
-     * @return mixed
-     */
-    private function isCssCompiled()
-    {
+        if (! $this->getEnv()) {
+            return false;
+        }
 
-        return File::exists(temp_path(self::CSS_STYLE_FILE));
+        return true;
     }
 
     /**
@@ -170,30 +170,74 @@ class Settings extends Model
     }
 
     /**
-     * Check permissions.
+     * Check if css file has been compiled already.
      *
-     * @return bool
+     * @return mixed
      */
-    private function checkPermissions()
+    private function isCssCompiled()
     {
+        return File::exists($this->getCssPath());
+    }
 
-        if (! $this->enabled) {
-            return false;
-        }
+    /**
+     * Get folder path for compile CSS file.
+     *
+     * @return string
+     */
+    public function getCssPath()
+    {
+        return implode('/', [$this->getPathTemp(), self::CSS_STYLE_FILE]);
+    }
 
-        if ($this->superuser) {
+    /**
+     * Get folder path for compile CSS file.
+     *
+     * @return mixed
+     */
+    public function getPathTemp()
+    {
+        return $this->pathTemp;
+    }
 
-            $isSuperUser = BackendAuth::getUser()->isSuperUser();
+    /**
+     * Set folder path for compiled CSS file.
+     *
+     * @return $this
+     */
+    public function setPathTemp($folder = '')
+    {
+        $this->pathTemp = temp_path($folder);
 
-            if (! $isSuperUser) {
-                return false;
-            }
-        }
+        return $this;
+    }
 
-        if (! $this->getEnv()) {
-            return false;
-        }
+    /**
+     * Compile CSS and save as a file.
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private function compileCss()
+    {
+        $parser = new Less_Parser(['compress' => true]);
+        $lessPath = File::symbolizePath('~/plugins/magenizr/envbar/assets/less/');
 
-        return true;
+        $parser->ModifyVars([
+            'color' => self::get('magenizr_envbar.color', $this->getEnv('color')),
+        ]);
+
+        $parser->parse(File::get($lessPath.'/style.less'));
+
+        return File::put($this->getCssPath(), $parser->getCss());
+    }
+
+    /**
+     * Get file path for compile CSS file.
+     *
+     * @return string
+     */
+    public function getPublicCssPath()
+    {
+        return str_replace(public_path(), '', $this->getCssPath());
     }
 }

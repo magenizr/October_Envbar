@@ -2,3 +2,5 @@
     - 'Initialize plugin.'
 1.0.1:
     - 'Fallback for APP_ENV variable. Compile CSS again if ./storage/temp has been cleared.'
+1.0.2:
+    - 'Change path for compiled CSS file from ./storage/temp to ./storage/temp/public.'

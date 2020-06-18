@@ -1,27 +1,36 @@
 ## Envbar
 This October CMS plugin allows you to differentiate between environments by adding a custom colored bar above the top navigation.
 
-![Magenizr Envbar - Intro](https://images2.imgbox.com/91/81/I6zldnVl_o.gif)
+![October Envbar - Intro](https://images2.imgbox.com/69/cf/EhSjgnjn_o.gif)
 
 ## System Requirements
 - October CMS 1.0.4x
 - PHP 7.x
 
-## Installation (Backend)
+## Installation
+### Backend
 
 Go to `Settings > System > Updates & Plugins` and search for the plugin.
 
-## Installation (Manually)
+### Artisan
+
+```
+php artisan plugin:install Magenizr.Envbar
+Downloading plugin: Magenizr.Envbar
+Unpacking plugin: Magenizr.Envbar
+```
+
+### Manually
 1. Download the code.
-2. Extract the downloaded tar.gz file. Example: `tar -xzf October_Envbar_1.0.1.tar.gz`.
+2. Extract the downloaded tar.gz file. Example: `tar -xzf October_Envbar_1.0.2.tar.gz`.
 3. Copy the code into `./plugins/magenizr/envbar/`.
 
 ## Configuration
 Make sure the name of the environment ( e.g `development` ) matches the value of the variable `APP_ENV` or `default` in `./config/environment.php`.
 
 ## Features
-* Enable or disable temporarily.
-* Enable for Superusers only.
+* Enable or disable plugin temporarily.
+* Enable plugin for Superusers only.
 * Add multiple environments and choose the color of the bar.
 
 ## Usage
@@ -34,6 +43,9 @@ If you experience any issues, don't hesitate to open an issue on [Github](https:
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
+===== 1.0.2 =====
+* Move compiled CSS file from `./storage/temp` to `./storage/temp/public` Thx @jan-vince
+
 ===== 1.0.1 =====
 * Fallback for `APP_ENV` variable.
 * Compile CSS again if `./storage/temp` has been cleared.
