@@ -10,7 +10,7 @@ This October CMS plugin allows you to differentiate between environments by addi
 ## Installation
 ### Backend
 
-Go to `Settings > System > Updates & Plugins` and search for the plugin.
+Go to `Settings > System > Updates & Plugins` and search for the plugin. Click on `Install Plugins` and search for `envbar`.
 
 ### Artisan
 
@@ -37,14 +37,14 @@ Make sure the name of the environment ( e.g `development` ) matches the value of
 Simply navigate to `Settings > System > Envbar` and enable the plugin. Update colors within the `Environments` section if required.
 
 ## Support
-If you experience any issues, don't hesitate to open an issue on [Github](https://github.com/magenizr/October_Envbar/issues).
+If you experience any issues, don't hesitate to open an issue on [GitHub](https://github.com/magenizr/October_Envbar/issues).
 
 ## Contact
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
 ===== 1.0.2 =====
-* Move compiled CSS file from `./storage/temp` to `./storage/temp/public` Thx @jan-vince
+* Move compiled CSS file from `./storage/temp` to `./storage/temp/public`.
 
 ===== 1.0.1 =====
 * Fallback for `APP_ENV` variable.
