@@ -33,7 +33,7 @@ class Plugin extends PluginBase
 
             if ($this->settings->setPathTemp('public')->renderCss()) {
 
-                $controller->addCss($this->settings->getPublicCssPath(), '1.0.2');
+                $controller->addCss($this->settings->getPublicCssPath(), '1.0.3');
             }
         });
     }

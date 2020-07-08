@@ -31,9 +31,14 @@ class Settings extends Model
     const CSS_STYLE_FILE = 'magenizr.envbar.style.css';
 
     /**
-     * @var string The key to store rendered CSS in the cache under
+     * @var string The key to store rendered styles
      */
-    public $cacheKey = 'backend::magenizr.envbar.style';
+    public $cacheStyle = 'backend::magenizr.envbar.style';
+
+    /**
+     * @var string The key to store MD5 hash of the .env file in
+     */
+    public $cacheEnvHash = 'backend::magenizr.envbar.envhash';
 
     /**
      * @var array
@@ -50,10 +55,12 @@ class Settings extends Model
      */
     public $settingsFields = 'fields.yaml';
 
+    /**
+     * @var
+     */
     private $pathTemp;
 
     // Default settings.
-
     public function initSettingsData()
     {
         $this->enabled = false;
@@ -81,7 +88,7 @@ class Settings extends Model
      */
     public function afterSave()
     {
-        Cache::forget(self::instance()->cacheKey);
+        Cache::forget(self::instance()->cacheStyle);
     }
 
     /**
@@ -95,16 +102,26 @@ class Settings extends Model
             return false;
         }
 
-        $cacheKey = self::instance()->cacheKey;
+        // Clear cache if .env file has been updated
+        if ($this->isEnvUpdated()) {
 
-        if (Cache::has($cacheKey) && $this->isCssCompiled()) {
+            $this->afterSave();
+        }
 
-            return Cache::get($cacheKey);
+        $cacheStyle = self::instance()->cacheStyle;
+
+        // Return cached CSS styles
+        if (Cache::has($cacheStyle) && $this->isCssCompiled()) {
+
+            return Cache::get($cacheStyle);
         }
 
         try {
+
+            // Cache CSS styles
             $customCss = $this->compileCss();
-            Cache::forever($cacheKey, $customCss);
+            Cache::forever($cacheStyle, $customCss);
+
         } catch (Exception $ex) {
             $customCss = '/* '.$ex->getMessage().' */';
         }
@@ -177,6 +194,47 @@ class Settings extends Model
     private function isCssCompiled()
     {
         return File::exists($this->getCssPath());
+    }
+
+    /**
+     * Return MD5 hash of .env file.
+     *
+     * @return bool|false|string
+     */
+    private function getEnvHash()
+    {
+        $envFile = implode('/', [app()->environmentPath(), app()->environmentFile()]);
+
+        if (is_readable($envFile)) {
+
+            return md5_file($envFile);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if .env file has been changed and cache MD5 hash.
+     *
+     * @return bool
+     */
+    private function isEnvUpdated()
+    {
+        $envHash = $this->getEnvHash();
+
+        if ($envHash) {
+
+            $cacheEnvHash = self::instance()->cacheEnvHash;
+
+            if (Cache::get($cacheEnvHash) !== $envHash) {
+
+                Cache::forever($cacheEnvHash, $envHash);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
