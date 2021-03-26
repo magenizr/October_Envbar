@@ -286,6 +286,11 @@ class Settings extends Model
 
         $parser->parse(File::get($lessPath.'/style.less'));
 
+        if(!File::exists($this->getPathTemp()))
+        {
+            File::makeDirectory( $this->getPathTemp() );
+        }
+
         return File::put($this->getCssPath(), $parser->getCss());
     }
 
