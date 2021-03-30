@@ -1,0 +1,17 @@
+{
+    "name": "october/oc-envbar",
+    "type": "october-plugin",
+    "description": "This October CMS plugin allows you to differentiate between environments by adding a custom colored bar above the top navigation.",
+    "keywords": ["october", "cms", "environment", "bar"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Forkel",
+            "email": "tobias@magenizr.com",
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "composer/installers": "~1.0"
+    }
+}
