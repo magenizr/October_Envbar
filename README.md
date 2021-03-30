@@ -45,7 +45,7 @@ Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.co
 
 ## History
 ===== 1.0.4 =====
-* Create temp folder is not exists. Thx @jan-vince
+* Create temp folder if not exists. Thx @jan-vince
 
 ===== 1.0.3 =====
 * Automatically clear cached styles ( colors ) if `.env` file has been updated. Thx @kavishdahekar
