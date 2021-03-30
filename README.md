@@ -44,6 +44,9 @@ If you experience any issues, don't hesitate to open an issue on [Github](https:
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
+===== 1.0.4 =====
+* Create temp folder is not exists. Thx @jan-vince
+
 ===== 1.0.3 =====
 * Automatically clear cached styles ( colors ) if `.env` file has been updated. Thx @kavishdahekar
 
