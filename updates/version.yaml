@@ -6,3 +6,5 @@
     - 'Change path for compiled CSS file from ./storage/temp to ./storage/temp/public.'
 1.0.3:
     - 'Automatically clear cached styles ( colors ) if `.env` file has been updated.'
+1.0.4:
+    - 'Create temp folder if not exists.'
