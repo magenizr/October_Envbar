@@ -1,5 +1,5 @@
 {
-    "name": "october/oc-envbar",
+    "name": "magenizr/oc-envbar",
     "type": "october-plugin",
     "description": "This October CMS plugin allows you to differentiate between environments by adding a custom colored bar above the top navigation.",
     "keywords": ["october", "cms", "environment", "bar"],
