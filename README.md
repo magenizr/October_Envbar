@@ -4,25 +4,26 @@ This October CMS plugin allows you to differentiate between environments by addi
 ![October Envbar - Intro](https://images2.imgbox.com/69/cf/EhSjgnjn_o.gif)
 
 ## System Requirements
-- October CMS 1.0.4x
-- PHP 7.x
+- October CMS 1.x, 2.x, 3.x
+- PHP 7.x, 8.x
 
 ## Installation
 ### Backend
+The plugin can be installed via backend as follows.
 
 Go to `Settings > System > Updates & Plugins` and search for the plugin. Click on `Install Plugins` and search for `envbar`.
 
 ### Artisan
+Alternatively the plugin can be installed via CLI by using the command `plugin:install`.
 
 ```
 php artisan plugin:install Magenizr.Envbar
-Downloading plugin: Magenizr.Envbar
-Unpacking plugin: Magenizr.Envbar
+php artisan cache:clear
 ```
 
 ### Manually
 1. Download the code.
-2. Extract the downloaded tar.gz file. Example: `tar -xzf October_Envbar_1.0.2.tar.gz`.
+2. Extract the downloaded tar.gz file. Example: `tar -xzf October_Envbar_1.0.5.tar.gz`.
 3. Copy the code into `./plugins/magenizr/envbar/`.
 
 ## Configuration
@@ -44,6 +45,9 @@ If you experience any issues, don't hesitate to open an issue on [Github](https:
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
+===== 1.0.5 =====
+* October CMS 3.0 compatibility
+
 ===== 1.0.4 =====
 * Create temp folder if not exists. Thx @jan-vince
 
