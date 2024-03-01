@@ -4,7 +4,7 @@
  *
  * @category    Magenizr
  * @package     Magenizr_Envbar
- * @copyright   Copyright (c) 2020 Magenizr (https://www.Magenizr.com)
+ * @copyright   Copyright (c) 2020 Magenizr (https://www.magenizr.com.au)
  * @license        http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 

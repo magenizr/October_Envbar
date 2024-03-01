@@ -45,6 +45,9 @@ If you experience any issues, don't hesitate to open an issue on [Github](https:
 Follow us on [GitHub](https://github.com/magenizr), [Twitter](https://twitter.com/magenizr) and [Facebook](https://www.facebook.com/magenizr).
 
 ## History
+===== 1.0.6 =====
+* Fix member function isSuperUser() on null
+
 ===== 1.0.5 =====
 * October CMS 3.0 compatibility
 

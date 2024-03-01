@@ -5,7 +5,7 @@
  *
  * @category    Magenizr
  * @package     Magenizr_Envbar
- * @copyright   Copyright (c) 2020 Magenizr (https://www.Magenizr.com)
+ * @copyright   Copyright (c) 2020 Magenizr (https://www.magenizr.com.au)
  * @license        http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
@@ -98,7 +98,7 @@ class Settings extends Model
      */
     public function renderCss()
     {
-        if (! $this->checkPermissions()) {
+        if (!$this->checkPermissions()) {
             return false;
         }
 
@@ -123,7 +123,7 @@ class Settings extends Model
             Cache::forever($cacheStyle, $customCss);
 
         } catch (Exception $ex) {
-            $customCss = '/* '.$ex->getMessage().' */';
+            $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 
         return $customCss;
@@ -136,20 +136,19 @@ class Settings extends Model
      */
     private function checkPermissions()
     {
-        if (! $this->enabled) {
+        if (!$this->enabled) {
             return false;
         }
 
         if ($this->superuser) {
 
-            $isSuperUser = BackendAuth::getUser()->isSuperUser();
-
-            if (! $isSuperUser) {
+            $backendUser = BackendAuth::getUser();
+            if ($backendUser && !$backendUser->isSuperUser()) {
                 return false;
             }
         }
 
-        if (! $this->getEnv()) {
+        if (!$this->getEnv()) {
             return false;
         }
 
@@ -284,11 +283,10 @@ class Settings extends Model
             'color' => self::get('magenizr_envbar.color', $this->getEnv('color')),
         ]);
 
-        $parser->parse(File::get($lessPath.'/style.less'));
+        $parser->parse(File::get($lessPath . '/style.less'));
 
-        if(!File::exists($this->getPathTemp()))
-        {
-            File::makeDirectory( $this->getPathTemp() );
+        if (!File::exists($this->getPathTemp())) {
+            File::makeDirectory($this->getPathTemp());
         }
 
         return File::put($this->getCssPath(), $parser->getCss());

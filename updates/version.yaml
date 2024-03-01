@@ -8,3 +8,7 @@
     - 'Automatically clear cached styles ( colors ) if `.env` file has been updated.'
 1.0.4:
     - 'Create temp folder if not exists.'
+1.0.5:
+    - 'October CMS 3.0 compatibility'
+1.0.6:
+    - 'Fix member function isSuperUser() on null'
